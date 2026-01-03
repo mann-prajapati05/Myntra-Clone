@@ -1,4 +1,4 @@
-# 🛍️ Myntra Clone – Full Stack (React + Redux + Node.js)
+# 🛍️ Myntra Clone – Full Stack (React + Redux + Node.js + Express.js)
 
 A full-stack **Myntra Clone** application built with **React, Redux, Bootstrap** on the frontend and **Node.js + Express** on the backend.  
 The backend serves product data via REST APIs, while the frontend consumes APIs and manages cart state using Redux.

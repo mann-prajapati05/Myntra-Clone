@@ -1,15 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const bagItemsSlice=createSlice({
-    name:"bagItems",
+    name:"bagItemIds",
     initialState:[],
     reducers:{
+        bagLoadedFromServer:(state,action)=>{
+            console.log("item ids loaded..");
+            return state=action.payload.bagItemIds;
+        },
         addToBag:(state,action)=>{
-            console.log("item added");
+            console.log("item id added");
             return state=[...state,action.payload.itemId];
         },
         removeFromBag:(state,action)=>{
-            console.log("item removed");
+            console.log("item id removed");
             return state.filter((item)=>item.id!=action.payload.itemId);
         }
     }

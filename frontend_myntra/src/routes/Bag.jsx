@@ -2,24 +2,33 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import BagSummary from "../components/BagSummary";
 import BagItem from "../components/BagItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import axios from "axios";
 const Bag = () => {
-  // const item = {
-  //   id: "001",
-  //   image: "images/1.jpg",
-  //   company: "Carlton London",
-  //   item_name: "Rhodium-Plated CZ Floral Studs",
-  //   original_price: 1045,
-  //   current_price: 606,
-  //   discount_percentage: 42,
-  //   return_period: 14,
-  //   delivery_date: "10 Oct 2023",
-  //   rating: {
-  //     stars: 4.5,
-  //     count: 1400,
-  //   },
-  // };
-  const bagItems = useSelector((store) => store.bagItems);
+  const dispatch = useDispatch();
+  const bagItemIds = useSelector((store) => store.bagItemIds);
+  const [bagItems, setBagItems] = useState([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    (async () => {
+      const result = await axios.get(
+        "http://localhost:3030/bag/items",
+        { withCredentials: true },
+        { signal },
+      );
+      console.log("i got the Bag in Bag.jsx..", result.data);
+      setBagItems(result.data);
+    })();
+
+    return () => {
+      console.log("bro ...Clean UP!!");
+      controller.abort();
+    };
+  }, [bagItemIds]);
 
   return (
     <>
@@ -27,7 +36,7 @@ const Bag = () => {
         <div className="bag-page">
           <div className="bag-items-container">
             {bagItems.map((item) => (
-              <BagItem key={item.id} item={item}></BagItem>
+              <BagItem key={item._id} item={item}></BagItem>
             ))}
           </div>
           <div className="bag-summary">

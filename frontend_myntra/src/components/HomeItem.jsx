@@ -15,7 +15,7 @@ const HomeItem = ({ item }) => {
     dispatch(bagItemsActions.addToBag({ itemId: item._id }));
   };
 
-  const bagItems = useSelector((Store) => Store.bagItems);
+  const bagItemIds = useSelector((Store) => Store.bagItemIds);
 
   return (
     <>
@@ -31,7 +31,7 @@ const HomeItem = ({ item }) => {
           <span className="original-price">Rs {item.MRP}</span>
           <span className="discount">({item.discounts}% OFF)</span>
         </div>
-        {!bagItems.includes(item) ? (
+        {!bagItemIds.includes(item._id) ? (
           <button
             className="btn-add-bag text-white fw-bold"
             onClick={handleAddtoBag}

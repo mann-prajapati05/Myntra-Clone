@@ -7,7 +7,7 @@ import { IoSearch } from "react-icons/io5";
 import { TbLogin } from "react-icons/tb";
 
 const Header = () => {
-  const bagItems = useSelector((store) => store.bagItems);
+  const bagItemIds = useSelector((store) => store.bagItemIds);
   return (
     <>
       <header>
@@ -67,7 +67,7 @@ const Header = () => {
             <span className="position-relative">
               <BsHandbag />
               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {bagItems.length}
+                {bagItemIds.length}
               </span>
             </span>
             <span className="fw-bold pt-0px" style={{ fontSize: "x-small" }}>

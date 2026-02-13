@@ -12,7 +12,28 @@ const BagSummary = () => {
     finalPayment: 0,
   });
 
-  const bagItems = useSelector((store) => store.bagItems);
+  const bagItemIds = useSelector((store) => store.bagItemIds);
+  const [bagItems, setBagItems] = useState([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    (async () => {
+      const result = await axios.get(
+        "http://localhost:3030/bag/items",
+        { withCredentials: true },
+        { signal },
+      );
+      console.log("i got the Bag in BagSummary.jsx..", result.data);
+      setBagItems(result.data);
+    })();
+
+    return () => {
+      console.log("bro ...Clean UP!!");
+      controller.abort();
+    };
+  }, [bagItemIds]);
 
   useEffect(() => {
     console.log("i am useEffect of bag summary");

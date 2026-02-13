@@ -5,7 +5,7 @@ import bagItemsSlice from './bagItems';
 export const myStore= configureStore({
     reducer:{
         itemList:itemListSlice.reducer,
-        bagItems:bagItemsSlice.reducer,
+        bagItemIds:bagItemsSlice.reducer,
     }
 }) 
 

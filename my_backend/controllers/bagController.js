@@ -28,7 +28,17 @@ exports.getBag = async(req,res,next)=>{
     const decoded=jwt.verify(token,secret);
 
     const user=await User.findById(decoded._id);
+    //await user.populate('bagItems');
+    res.status(201).json(user.bagItems);
+}
+exports.getBagItems = async(req,res,next)=>{
+    //const user=await User.findOne({email:"abc@gmail.com"}); //dummy find user - just to check api
+    const token=req.cookies.uid;
+    const decoded=jwt.verify(token,secret);
+
+    const user=await User.findById(decoded._id);
     await user.populate('bagItems');
+    console.log("i res you from getbagItems Backend..");
     res.status(201).json(user.bagItems);
 }
 exports.deleteFromBag = async(req,res,next)=>{

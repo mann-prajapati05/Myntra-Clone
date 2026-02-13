@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ const Login = () => {
       { withCredentials: true },
     );
     console.log(result);
-    navigate("http://localhost:5173");
+    navigate("/");
   };
 
   return (

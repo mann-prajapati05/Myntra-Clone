@@ -7,6 +7,7 @@ import { Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { itemListActions } from "../store";
+import axios from "axios";
 
 function App() {
   const dispatch = useDispatch();
@@ -15,12 +16,21 @@ function App() {
     const controller = new AbortController();
     const signal = controller.signal;
 
-    fetch("http://localhost:8080/items", { signal })
-      .then((res) => res.json())
-      .then((obj) => {
-        console.log(obj);
-        dispatch(itemListActions.itemsFromServer(obj));
-      });
+    (async () => {
+      const result = await axios.get(
+        "http://localhost:3030",
+        { withCredentials: true },
+        { signal },
+      );
+      console.log(result);
+      dispatch(itemListActions.itemsFromServer({ items: result.data }));
+    })();
+    // axios.get('http://localhost:8080/items', { signal })
+    //   .then((res) => res.json())
+    //   .then((obj) => {
+    //     console.log(obj);
+    //     dispatch(itemListActions.itemsFromServer(obj));
+    //   });
 
     return () => {
       console.log("Clean UP!!");

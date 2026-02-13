@@ -4,6 +4,7 @@ import { BsHandbag } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { IoSearch } from "react-icons/io5";
+import { TbLogin } from "react-icons/tb";
 
 const Header = () => {
   const bagItems = useSelector((store) => store.bagItems);
@@ -39,6 +40,16 @@ const Header = () => {
           />
         </div>
         <div className="action_bar">
+          <Link
+            to="/login"
+            className="action_container text-decoration-none text-black"
+          >
+            <div className="action_container">
+              <TbLogin />
+              <span className="action_name">Login</span>
+            </div>
+          </Link>
+
           <div className="action_container">
             <IoMdPerson />
             <span className="action_name">Profile</span>

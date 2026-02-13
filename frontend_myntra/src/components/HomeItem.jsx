@@ -3,12 +3,16 @@ import { bagItemsActions } from "../store";
 import { BsFillHandbagFill } from "react-icons/bs";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 
 const HomeItem = ({ item }) => {
   const dispatch = useDispatch();
 
-  const handleAddtoBag = () => {
-    dispatch(bagItemsActions.addToBag({ item }));
+  const handleAddtoBag = async () => {
+    const result = await axios.post(`http://localhost:3030/bag/${item._id}`);
+    console.log(result.data);
+    dispatch(bagItemsActions.addToBag({ itemId: item._id }));
   };
 
   const bagItems = useSelector((Store) => Store.bagItems);
@@ -16,16 +20,16 @@ const HomeItem = ({ item }) => {
   return (
     <>
       <div className="item-container">
-        <img className="item-image" src={item.image} alt="item image" />
+        <img className="item-image" src={item.photo} alt="item image" />
         <div className="rating">
-          {item.rating.stars} ⭐ | {item.rating.count}
+          {item.rating} ⭐ | {item.reviewNumbers}
         </div>
-        <div className="company-name">{item.company}</div>
-        <div className="item-name">{item.item_name}</div>
+        <div className="company-name">{item.title}</div>
+        <div className="item-name">{item.description}</div>
         <div className="price">
-          <span className="current-price">Rs {item.current_price}</span>
-          <span className="original-price">Rs {item.original_price}</span>
-          <span className="discount">({item.discount_percentage}% OFF)</span>
+          <span className="current-price">Rs {item.actualPrice}</span>
+          <span className="original-price">Rs {item.MRP}</span>
+          <span className="discount">({item.discounts}% OFF)</span>
         </div>
         {!bagItems.includes(item) ? (
           <button

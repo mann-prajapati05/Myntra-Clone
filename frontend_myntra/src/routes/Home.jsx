@@ -25,7 +25,7 @@ const Home = () => {
       <main>
         <div className="items-container">
           {itemList.map((item) => {
-            return <HomeItem key={item.id} item={item}></HomeItem>;
+            return <HomeItem key={item._id} item={item}></HomeItem>;
           })}
         </div>
       </main>

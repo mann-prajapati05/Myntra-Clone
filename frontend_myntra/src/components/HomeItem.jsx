@@ -2,21 +2,41 @@ import { useDispatch, useSelector } from "react-redux";
 import { bagItemsActions } from "../store";
 import { BsFillHandbagFill } from "react-icons/bs";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { MdDelete } from "react-icons/md";
+import { RiEdit2Fill } from "react-icons/ri";
+
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const HomeItem = ({ item }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleAddtoBag = async () => {
-    const result = await axios.post(`http://localhost:3030/bag/${item._id}`);
-    console.log(result.data);
-    dispatch(bagItemsActions.addToBag({ itemId: item._id }));
+    try {
+      const result = await axios.post(`http://localhost:3030/bag/${item._id}`);
+      console.log(result.data);
+      dispatch(bagItemsActions.addToBag({ itemId: item._id }));
+    } catch (err) {
+      navigate("/login");
+    }
+  };
+  const handleDelete = async () => {
+    try {
+    } catch (err) {
+      navigate("/login");
+    }
+  };
+  const handleEdit = async () => {
+    try {
+    } catch (err) {
+      navigate("/login");
+    }
   };
 
   const bagItemIds = useSelector((Store) => Store.bagItemIds);
-
+  const isAdmin = useSelector((store) => store.isAdmin);
   return (
     <>
       <div className="item-container">
@@ -31,21 +51,43 @@ const HomeItem = ({ item }) => {
           <span className="original-price">Rs {item.MRP}</span>
           <span className="discount">({item.discounts}% OFF)</span>
         </div>
-        {!bagItemIds.includes(item._id) ? (
-          <button
-            className="btn-add-bag text-white fw-bold"
-            onClick={handleAddtoBag}
-          >
-            <BsFillHandbagFill />
-            <span className="m-2">ADD TO BAG</span>
-          </button>
-        ) : (
-          <Link to="/bag">
-            <button className="btn-add-bag text-white fw-bold">
-              <span className="m-2">GO TO BAG</span>
-              <FaArrowRightLong />
+        {!isAdmin && (
+          <>
+            {!bagItemIds.includes(item._id) ? (
+              <button
+                className="btn-add-bag text-white fw-bold"
+                onClick={handleAddtoBag}
+              >
+                <BsFillHandbagFill />
+                <span className="m-2">ADD TO BAG</span>
+              </button>
+            ) : (
+              <Link to="/bag">
+                <button className="btn-add-bag text-white fw-bold">
+                  <span className="m-2">GO TO BAG</span>
+                  <FaArrowRightLong />
+                </button>
+              </Link>
+            )}
+          </>
+        )}
+        {isAdmin && (
+          <>
+            <button
+              className="btn-add-bag text-white fw-bold"
+              onClick={handleEdit}
+            >
+              <RiEdit2Fill />
+              <span className="m-2">Edit Details</span>
             </button>
-          </Link>
+            <button
+              className="btn-add-bag text-white fw-bold"
+              onClick={handleDelete}
+            >
+              <MdDelete />
+              <span className="m-2">Delete Details</span>
+            </button>
+          </>
         )}
       </div>
     </>

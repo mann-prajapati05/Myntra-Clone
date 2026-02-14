@@ -5,23 +5,29 @@ import BagItem from "../components/BagItem";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Bag = () => {
   const dispatch = useDispatch();
   const bagItemIds = useSelector((store) => store.bagItemIds);
   const [bagItems, setBagItems] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
 
     (async () => {
-      const result = await axios.get(
-        "http://localhost:3030/bag/items",
-        { withCredentials: true },
-        { signal },
-      );
-      console.log("i got the Bag in Bag.jsx..", result.data);
-      setBagItems(result.data);
+      try {
+        const result = await axios.get(
+          "http://localhost:3030/bag/items",
+          { withCredentials: true },
+          { signal },
+        );
+        console.log("i got the Bag in Bag.jsx..", result.data);
+        setBagItems(result.data);
+      } catch (err) {
+        navigate("/login");
+      }
     })();
 
     return () => {

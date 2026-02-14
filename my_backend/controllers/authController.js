@@ -4,13 +4,14 @@ const bcrypt=require('bcrypt');
 
 const secret="bro,icannottellthis!!";
 
-exports.postSignIn=async(req,res,next)=>{
+exports.postSignup=async(req,res,next)=>{
     console.log("i am inside signIn",req.body);
-    const {firstName,lastName,email,password,userType}=req.body;
+    const {firstName,lastName,email,password,gender}=req.body;
     const bagItems=[];
+    const userType="customer";
     const hashedPassword=await bcrypt.hash(password,10);
 
-    const user=new User({firstName,lastName,email,password:hashedPassword,userType,bagItems});
+    const user=new User({firstName,lastName,email,password:hashedPassword,gender,userType,bagItems});
     await user.save();
     const payload={
         _id:user._id,
@@ -46,5 +47,21 @@ exports.postLogin=async(req,res,next)=>{
         }
     }
     return res.json({message:"Invalid email or password.."});
+}
+
+exports.verifyAdmin=async(req,res,next)=>{
+    try{
+        const token=req.cookies.uid;
+        if(!token){
+            return res.status(401).json({message:"No token found"});
+        }
+        const decoded=jwt.verify(token,secret);
+        if(decoded.userType==="admin"){
+            return res.status(200).json({isAdmin:true});
+        }
+        return res.status(401).json({isAdmin:false});
+    }catch(err){
+        return res.status(401).json({message:"Invalid token"});
+    }
 }
 

@@ -7,6 +7,10 @@ import Home from "./routes/Home.jsx";
 import { Provider } from "react-redux";
 import { myStore } from "./store/index.js";
 import Login from "./routes/Login.jsx";
+import Signup from "./routes/Signup.jsx";
+import AdminLogin from "./routes/AdminLogin.jsx";
+import AddProduct from "./routes/AddProduct.jsx";
+import ModifyProducts from "./routes/ModifyProducts.jsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +28,22 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/signup",
+        element: <Signup />,
+      },
+      {
+        path: "/admin/login",
+        element: <AdminLogin />,
+      },
+      {
+        path: "/admin/add-product",
+        element: <AddProduct />,
+      },
+      {
+        path: "/admin/modify-products",
+        element: <ModifyProducts />,
       },
     ],
   },

@@ -1,9 +1,13 @@
 import { current } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+axios.defaults.withCredentials = true;
 
 const BagSummary = () => {
   console.log("im bag summary");
+  const navigate = useNavigate();
 
   const [bagSummary, setBagSummary] = useState({
     totalItem: 0,
@@ -18,15 +22,18 @@ const BagSummary = () => {
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-
     (async () => {
-      const result = await axios.get(
-        "http://localhost:3030/bag/items",
-        { withCredentials: true },
-        { signal },
-      );
-      console.log("i got the Bag in BagSummary.jsx..", result.data);
-      setBagItems(result.data);
+      try {
+        const result = await axios.get(
+          "http://localhost:3030/bag/items",
+          { withCredentials: true },
+          { signal },
+        );
+        console.log("i got the Bag in BagSummary.jsx..", result.data);
+        setBagItems(result.data);
+      } catch (err) {
+        navigate("/login");
+      }
     })();
 
     return () => {
@@ -41,15 +48,15 @@ const BagSummary = () => {
     let totalDiscount = 0;
     let totalMRP = 0;
     bagItems.map((item) => {
-      totalMRP += item.original_price;
-      totalDiscount += item.original_price - item.current_price;
+      totalMRP += item.MRP;
+      totalDiscount += item.MRP - item.actualPrice;
     });
 
     setBagSummary({
-      totalItem: bagItems.length,
+      totalItem: bagItemIds.length,
       totalMRP,
       totalDiscount,
-      finalPayment: bagItems.length == 0 ? 0 : totalMRP - totalDiscount + 99,
+      finalPayment: bagItemIds.length == 0 ? 0 : totalMRP - totalDiscount + 99,
     });
   }, [bagItems]);
 

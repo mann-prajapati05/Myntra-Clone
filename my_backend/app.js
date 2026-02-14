@@ -31,17 +31,18 @@ app.get('/',(req,res,next)=>{
 });
 
 app.use(authRouter);
+app.use(homeRouter);
 
 app.use((req,res,next)=>{
     console.log("my cookies : ", req.cookies);
     if(req.cookies.uid){
-        jwt.verify(req.cookies.uid,secret);
-        next();
+        const decoded=jwt.verify(req.cookies.uid,secret);
+        if(decoded.userType==="customer" || decoded.userType==="admin") next();
+        else return res.status(401).json({message:"Login first.."});
     }
-    else return res.json({message:"Login first.."});
+    else return res.status(401).json({message:"Login first.."});
 })
 
-app.use(homeRouter);
 app.use('/admin',adminRouter);
 app.use('/bag',bagRouter);
 

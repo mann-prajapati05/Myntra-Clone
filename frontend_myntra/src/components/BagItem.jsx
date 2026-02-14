@@ -16,7 +16,7 @@ const BagItem = ({ item }) => {
     <>
       <div className="bag-item-container">
         <div className="item-left-part">
-          <img className="bag-item-img" src={`../${item.photo}`} />
+          <img className="bag-item-img" src={item.photo} />
         </div>
         <div className="item-right-part">
           <div className="company">{item.title}</div>

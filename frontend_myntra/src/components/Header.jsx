@@ -5,9 +5,11 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { IoSearch } from "react-icons/io5";
 import { TbLogin } from "react-icons/tb";
+import { BsFillSignIntersectionFill } from "react-icons/bs";
 
 const Header = () => {
   const bagItemIds = useSelector((store) => store.bagItemIds);
+  const isAdmin = useSelector((store) => store.isAdmin);
   return (
     <>
       <header>
@@ -20,15 +22,26 @@ const Header = () => {
             />
           </Link>
         </div>
+
         <nav className="nav_bar">
-          <a href="#">Men</a>
-          <a href="#">Women</a>
-          <a href="#">Kids</a>
-          <a href="#">Home & Living</a>
-          <a href="#">Beauty</a>
-          <a href="#">
-            Studio <sup>New</sup>
-          </a>
+          {isAdmin && (
+            <>
+              <Link to="/admin/add-product">Add Product</Link>
+              <Link to="/admin/modify-products">Modify Inventory</Link>
+            </>
+          )}
+          {!isAdmin && (
+            <>
+              <a href="#">Men</a>
+              <a href="#">Women</a>
+              <a href="#">Kids</a>
+              <a href="#">Home & Living</a>
+              <a href="#">Beauty</a>
+              <a href="#">
+                Studio <sup>New</sup>
+              </a>
+            </>
+          )}
         </nav>
         <div className="search_bar">
           <span className="material-symbols-outlined search_icon">
@@ -40,6 +53,15 @@ const Header = () => {
           />
         </div>
         <div className="action_bar">
+          <Link
+            to="/signup"
+            className="action_container text-decoration-none text-black"
+          >
+            <div className="action_container">
+              <BsFillSignIntersectionFill />
+              <span className="action_name">Sign up</span>
+            </div>
+          </Link>
           <Link
             to="/login"
             className="action_container text-decoration-none text-black"

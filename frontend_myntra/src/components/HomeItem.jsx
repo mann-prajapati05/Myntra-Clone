@@ -22,16 +22,20 @@ const HomeItem = ({ item }) => {
       navigate("/login");
     }
   };
-  const handleDelete = async () => {
+  const handleDelete = async (e, pid) => {
     try {
+      console.log("processing remove product..");
+      await axios.delete(`http://localhost:3030/admin/remove-product/${pid}`);
+      console.log("removed succesfully..");
     } catch (err) {
-      navigate("/login");
+      console.log("Failed to remove product..", err);
+      navigate("/");
     }
   };
   const handleEdit = async () => {
     try {
     } catch (err) {
-      navigate("/login");
+      navigate("/");
     }
   };
 
@@ -82,7 +86,7 @@ const HomeItem = ({ item }) => {
             </button>
             <button
               className="btn-add-bag text-white fw-bold"
-              onClick={handleDelete}
+              onClick={(e) => handleDelete(e, item._id)}
             >
               <MdDelete />
               <span className="m-2">Delete Details</span>

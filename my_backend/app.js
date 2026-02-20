@@ -10,7 +10,6 @@ const adminRouter = require('./routes/adminRouter');
 const bagRouter = require('./routes/bagRouter');
 const authRouter = require('./routes/authRouter');
 
-//const DBpath = "mongodb+srv://mann:Password@airbnb.unu77r4.mongodb.net/myntra?appName=airBnb";
 const DBpath=process.env.MONGO_STR;
 const secret="bro,icannottellthis!!";
 

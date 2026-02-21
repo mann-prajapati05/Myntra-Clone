@@ -42,24 +42,27 @@ exports.postLogin=async(req,res,next)=>{
             }
             const token=jwt.sign(payload,secret);
             res.cookie("uid",token);
-            return res.status(200).json({ message: "Login successful" });
-
+            return res.status(200).json({ userType:payload.userType });
         }
     }
     return res.json({message:"Invalid email or password.."});
 }
 
-exports.verifyAdmin=async(req,res,next)=>{
+exports.postLogout = (req,res,next) =>{
+    res.clearCookie("uid");
+    res.status(200).json({message:"Logout successfully.."});
+}
+
+exports.verifyUser =async(req,res,next)=>{
     try{
+        console.log("checking for user auth..");
         const token=req.cookies.uid;
         if(!token){
             return res.status(401).json({message:"No token found"});
         }
         const decoded=jwt.verify(token,secret);
-        if(decoded.userType==="admin"){
-            return res.status(200).json({isAdmin:true});
-        }
-        return res.status(401).json({isAdmin:false});
+        console.log("checked auth seccessfully",decoded);
+        res.status(200).json({userType:decoded.userType});
     }catch(err){
         return res.status(401).json({message:"Invalid token"});
     }

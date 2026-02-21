@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { bagItemsActions } from "../store";
+import { bagItemsActions, itemListActions } from "../store";
 import { BsFillHandbagFill } from "react-icons/bs";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
@@ -27,9 +27,10 @@ const HomeItem = ({ item }) => {
       console.log("processing remove product..");
       await axios.delete(`http://localhost:3030/admin/remove-product/${pid}`);
       console.log("removed succesfully..");
+      dispatch(itemListActions.removeItem({ pid }));
+      navigate("/");
     } catch (err) {
       console.log("Failed to remove product..", err);
-      navigate("/");
     }
   };
   const handleEdit = async (pid) => {

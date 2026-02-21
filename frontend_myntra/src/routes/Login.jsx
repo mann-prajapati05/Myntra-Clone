@@ -1,12 +1,16 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { isAdminActions } from "../store";
 axios.defaults.withCredentials = true;
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { setLogin } = useOutletContext();
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -21,6 +25,10 @@ const Login = () => {
       { withCredentials: true },
     );
     console.log(result);
+    const { userType } = result.data;
+    if (userType === "admin") dispatch(isAdminActions.setAdminState(true));
+    else dispatch(isAdminActions.setAdminState(false));
+    setLogin(true);
     navigate("/");
   };
 

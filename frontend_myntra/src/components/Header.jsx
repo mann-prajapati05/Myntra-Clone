@@ -8,9 +8,9 @@ import { TbLogin } from "react-icons/tb";
 import { BsFillSignIntersectionFill } from "react-icons/bs";
 import { useEffect } from "react";
 import axios from "axios";
-import { bagItemsActions } from "../store";
+import { bagItemsActions, isAdminActions } from "../store";
 
-const Header = () => {
+const Header = ({ isLoggedIn, setLogin }) => {
   const bagItemIds = useSelector((store) => store.bagItemIds);
   const isAdmin = useSelector((store) => store.isAdmin);
   const dispatch = useDispatch();
@@ -42,6 +42,16 @@ const Header = () => {
       controller.abort();
     };
   }, []);
+
+  const handleLogout = async () => {
+    await axios.post(
+      "http://localhost:3030/logout",
+      {},
+      { withCredentials: true },
+    );
+    dispatch(isAdminActions.setAdminState(false));
+    setLogin(false);
+  };
 
   return (
     <>
@@ -86,24 +96,41 @@ const Header = () => {
           />
         </div>
         <div className="action_bar">
-          <Link
-            to="/signup"
-            className="action_container text-decoration-none text-black"
-          >
-            <div className="action_container">
-              <BsFillSignIntersectionFill />
-              <span className="action_name">Sign up</span>
-            </div>
-          </Link>
-          <Link
-            to="/login"
-            className="action_container text-decoration-none text-black"
-          >
-            <div className="action_container">
-              <TbLogin />
-              <span className="action_name">Login</span>
-            </div>
-          </Link>
+          {!isLoggedIn && (
+            <>
+              <Link
+                to="/signup"
+                className="action_container text-decoration-none text-black"
+              >
+                <div className="action_container">
+                  <BsFillSignIntersectionFill />
+                  <span className="action_name">Sign up</span>
+                </div>
+              </Link>
+              <Link
+                to="/login"
+                className="action_container text-decoration-none text-black"
+              >
+                <div className="action_container">
+                  <TbLogin />
+                  <span className="action_name">Login</span>
+                </div>
+              </Link>
+            </>
+          )}
+          {isLoggedIn && (
+            <>
+              <button
+                className="action_container btn btn-link text-black text-decoration-none p-0 border-0 shadow-none"
+                onClick={handleLogout}
+              >
+                <div className="action_container">
+                  <TbLogin />
+                  <span className="action_name">Logout</span>
+                </div>
+              </button>
+            </>
+          )}
 
           <div className="action_container">
             <IoMdPerson />

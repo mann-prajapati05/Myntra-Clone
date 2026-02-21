@@ -10,6 +10,9 @@ const itemListSlice=createSlice({
             //console.log("i am new state",state);
             return state;
         } ,
+        removeItem :(state,action) =>{
+            return state=state.filter(item=> item._id!=action.payload.pid);
+        }
     }
 });
 export default itemListSlice;

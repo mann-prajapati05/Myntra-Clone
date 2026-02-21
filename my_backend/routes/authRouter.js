@@ -5,6 +5,7 @@ const authController=require('../controllers/authController');
 
 authRouter.post('/signup',authController.postSignup);
 authRouter.post('/login',authController.postLogin);
-authRouter.get('/admin/verify',authController.verifyAdmin);
+authRouter.post('/logout',authController.postLogout);
+authRouter.get('/verify',authController.verifyUser);
 
 module.exports=authRouter;

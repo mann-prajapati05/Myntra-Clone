@@ -14,34 +14,6 @@ function App() {
   const bagItemIds = useSelector((store) => store.bagItemIds);
   const itemList = useSelector((store) => store.itemList);
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    (async () => {
-      try {
-        const result = await axios.get(
-          "http://localhost:3030/bag",
-          { withCredentials: true },
-          { signal },
-        );
-        console.log(result.data);
-        dispatch(
-          bagItemsActions.bagLoadedFromServer({ bagItemIds: result.data }),
-        );
-      } catch (err) {
-        if (err.response?.status === 401) {
-          dispatch(bagItemsActions.bagLoadedFromServer({ bagItemIds: [] }));
-        }
-      }
-    })();
-
-    return () => {
-      console.log("Clean UP!!");
-      controller.abort();
-    };
-  }, []);
-
   // Restore isAdmin state on page refresh if token exists
   useEffect(() => {
     const controller = new AbortController();

@@ -1,10 +1,10 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import HomeItem from "../components/HomeItem";
 import { useEffect } from "react";
 import axios from "axios";
 import { itemListActions } from "../store";
 const Home = () => {
-  const itemList = useSelector((store) => store.itemList);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -25,8 +25,36 @@ const Home = () => {
       controller.abort();
     };
   }, []);
-
+  const itemList = useSelector((store) => store.itemList);
   console.log("i am getting ", itemList);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    (async () => {
+      try {
+        const result = await axios.get(
+          "http://localhost:3030/bag",
+          { withCredentials: true },
+          { signal },
+        );
+        console.log(result.data);
+        dispatch(
+          bagItemsActions.bagLoadedFromServer({ bagItemIds: result.data }),
+        );
+      } catch (err) {
+        if (err.response?.status === 401) {
+          dispatch(bagItemsActions.bagLoadedFromServer({ bagItemIds: [] }));
+        }
+      }
+    })();
+
+    return () => {
+      console.log("Clean UP!!");
+      controller.abort();
+    };
+  }, []);
 
   return (
     <>

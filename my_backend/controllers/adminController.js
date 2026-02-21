@@ -26,3 +26,35 @@ exports.postRemoveProduct= async(req,res,next)=>{
         console.log("something went wrong ! while removing product!!",err);
     }
 }
+exports.putModifyProduct= async(req,res,next)=>{
+    try{
+        const {photo,title,description,rating,reviewNumbers,actualPrice,MRP,discounts}=req.body;
+        const pid=req.params.productId;
+        const product=await Product.findById(pid);
+        product.photo=photo;
+        product.title=title;
+        product.description=description;
+        product.rating=rating;
+        product.reviewNumbers=reviewNumbers;
+        product.actualPrice=actualPrice;
+        product.MRP=MRP;
+        product.discounts=discounts;
+        const updated_product=await product.save();
+        console.log("Product details updated!!");
+        res.status(201).json(updated_product);
+    }catch(err){
+        console.log("something went wrong ! while modify product!!",err);
+    }
+}
+exports.getProduct= async(req,res,next)=>{
+    try{
+        const pid=req.params.productId;
+        console.log(pid);
+        const product=await Product.findById(pid);
+        console.log(product);
+        res.status(200).json(product);
+    }catch(err){
+        console.log("something went wrong ! while getting product!!",err);
+    }
+}
+

@@ -23,7 +23,7 @@ const AdminLogin = () => {
       },
       { withCredentials: true },
     );
-    dispatch(isAdminActions.iamAdmin());
+    dispatch(isAdminActions.setAdminState(true));
     console.log(result);
     navigate("/");
   };

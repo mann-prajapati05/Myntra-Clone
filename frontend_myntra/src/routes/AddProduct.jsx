@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AddProduct = () => {
+  const { productId } = useParams();
+  const navigate = useNavigate();
+  const isEditMode = !!productId;
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -15,6 +21,45 @@ const AddProduct = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    (async () => {
+      console.log(productId);
+      const result = await axios.get(
+        `http://localhost:3030/admin/${productId}`,
+        { withCredentials: true, signal },
+      );
+      const {
+        photo,
+        title,
+        description,
+        rating,
+        reviewNumbers,
+        actualPrice,
+        MRP,
+        discounts,
+      } = result.data;
+      const new_form = {
+        photo,
+        title,
+        description,
+        rating,
+        reviewNumbers,
+        actualPrice,
+        MRP,
+        discounts,
+      };
+      setForm(new_form);
+    })();
+
+    return () => {
+      console.log("Clean-up..");
+      controller.abort();
+    };
+  }, [productId, isEditMode]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,13 +96,23 @@ const AddProduct = () => {
     if (Object.keys(err).length === 0) {
       setLoading(true);
       try {
-        const result = await axios.post(
-          "http://localhost:3030/admin/add-product",
-          form,
-          { withCredentials: true },
-        );
-        console.log("Product added:", result);
-        setSuccess("Product added successfully!");
+        if (isEditMode) {
+          const result = await axios.put(
+            `http://localhost:3030/admin/modify-product/${productId}`,
+            form,
+            { withCredentials: true },
+          );
+          console.log("Product updated:", result);
+          setSuccess("Product updated successfully!");
+        } else {
+          const result = await axios.post(
+            "http://localhost:3030/admin/add-product",
+            form,
+            { withCredentials: true },
+          );
+          console.log("Product added:", result);
+          setSuccess("Product added successfully!");
+        }
         setForm({
           title: "",
           description: "",
@@ -70,6 +125,7 @@ const AddProduct = () => {
         });
         // Clear success message after 3 seconds
         setTimeout(() => setSuccess(""), 3000);
+        setTimeout(() => navigate("/"), 1000);
       } catch (err) {
         console.error("Error adding product:", err);
         setErrors({
@@ -87,7 +143,9 @@ const AddProduct = () => {
         <div className="col-12 col-md-10 col-lg-8">
           <div className="card shadow-sm">
             <div className="card-body">
-              <h3 className="card-title mb-4 text-center">Add New Product</h3>
+              <h3 className="card-title mb-4 text-center">
+                {isEditMode ? "Update Product" : "Add New Product"}
+              </h3>
 
               {success && (
                 <div
@@ -253,15 +311,33 @@ const AddProduct = () => {
                   </div>
 
                   {/* Submit Button */}
-                  <div className="col-12 mt-4 d-grid">
-                    <button
-                      type="submit"
-                      className="btn btn-primary btn-lg"
-                      disabled={loading}
-                    >
-                      {loading ? "Adding Product..." : "Add Product"}
-                    </button>
-                  </div>
+
+                  {!isEditMode && (
+                    <>
+                      <div className="col-12 mt-4 d-grid">
+                        <button
+                          type="submit"
+                          className="btn btn-primary btn-lg"
+                          disabled={loading}
+                        >
+                          {loading ? "Adding Product..." : "Add Product"}
+                        </button>
+                      </div>
+                    </>
+                  )}
+                  {isEditMode && (
+                    <>
+                      <div className="col-12 mt-4 d-grid">
+                        <button
+                          type="submit"
+                          className="btn btn-primary btn-lg"
+                          disabled={loading}
+                        >
+                          {loading ? "updating Product..." : "Update Product"}
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               </form>
             </div>

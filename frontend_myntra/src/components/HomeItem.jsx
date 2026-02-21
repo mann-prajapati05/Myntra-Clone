@@ -32,11 +32,8 @@ const HomeItem = ({ item }) => {
       navigate("/");
     }
   };
-  const handleEdit = async () => {
-    try {
-    } catch (err) {
-      navigate("/");
-    }
+  const handleEdit = async (pid) => {
+    navigate(`/admin/add-product/${pid}`);
   };
 
   const bagItemIds = useSelector((Store) => Store.bagItemIds);
@@ -79,7 +76,7 @@ const HomeItem = ({ item }) => {
           <>
             <button
               className="btn-add-bag text-white fw-bold"
-              onClick={handleEdit}
+              onClick={() => handleEdit(item._id)}
             >
               <RiEdit2Fill />
               <span className="m-2">Edit Details</span>

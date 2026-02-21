@@ -12,6 +12,7 @@ import axios from "axios";
 function App() {
   const dispatch = useDispatch();
   const bagItemIds = useSelector((store) => store.bagItemIds);
+  const itemList = useSelector((store) => store.itemList);
 
   useEffect(() => {
     const controller = new AbortController();

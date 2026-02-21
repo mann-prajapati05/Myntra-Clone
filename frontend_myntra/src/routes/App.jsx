@@ -19,26 +19,6 @@ function App() {
     const signal = controller.signal;
 
     (async () => {
-      const result = await axios.get(
-        "http://localhost:3030",
-        { withCredentials: true },
-        { signal },
-      );
-      console.log(result);
-      dispatch(itemListActions.itemsFromServer({ items: result.data }));
-    })();
-
-    return () => {
-      console.log("Clean UP!!");
-      controller.abort();
-    };
-  }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    (async () => {
       try {
         const result = await axios.get(
           "http://localhost:3030/bag",

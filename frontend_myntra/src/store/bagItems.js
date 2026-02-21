@@ -14,7 +14,7 @@ const bagItemsSlice=createSlice({
         },
         removeFromBag:(state,action)=>{
             console.log("item id removed");
-            return state.filter((item)=>item.id!=action.payload.itemId);
+            return state.filter((item)=>item!=action.payload.itemId);
         }
     }
 });

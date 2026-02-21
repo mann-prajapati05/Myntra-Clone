@@ -28,34 +28,6 @@ const Home = () => {
   const itemList = useSelector((store) => store.itemList);
   console.log("i am getting ", itemList);
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    (async () => {
-      try {
-        const result = await axios.get(
-          "http://localhost:3030/bag",
-          { withCredentials: true },
-          { signal },
-        );
-        console.log(result.data);
-        dispatch(
-          bagItemsActions.bagLoadedFromServer({ bagItemIds: result.data }),
-        );
-      } catch (err) {
-        if (err.response?.status === 401) {
-          dispatch(bagItemsActions.bagLoadedFromServer({ bagItemIds: [] }));
-        }
-      }
-    })();
-
-    return () => {
-      console.log("Clean UP!!");
-      controller.abort();
-    };
-  }, []);
-
   return (
     <>
       <main>

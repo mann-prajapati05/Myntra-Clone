@@ -2,14 +2,47 @@ import { IoMdPerson } from "react-icons/io";
 import { FaRegHeart } from "react-icons/fa";
 import { BsHandbag } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IoSearch } from "react-icons/io5";
 import { TbLogin } from "react-icons/tb";
 import { BsFillSignIntersectionFill } from "react-icons/bs";
+import { useEffect } from "react";
+import axios from "axios";
+import { bagItemsActions } from "../store";
 
 const Header = () => {
   const bagItemIds = useSelector((store) => store.bagItemIds);
   const isAdmin = useSelector((store) => store.isAdmin);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    (async () => {
+      try {
+        const result = await axios.get(
+          "http://localhost:3030/bag",
+          { withCredentials: true },
+          { signal },
+        );
+        console.log(result.data);
+        dispatch(
+          bagItemsActions.bagLoadedFromServer({ bagItemIds: result.data }),
+        );
+      } catch (err) {
+        if (err.response?.status === 401) {
+          dispatch(bagItemsActions.bagLoadedFromServer({ bagItemIds: [] }));
+        }
+      }
+    })();
+
+    return () => {
+      console.log("Clean UP!!");
+      controller.abort();
+    };
+  }, []);
+
   return (
     <>
       <header>

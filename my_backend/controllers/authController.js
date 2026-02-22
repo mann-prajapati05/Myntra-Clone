@@ -53,7 +53,11 @@ exports.postSignup = [
             userType:user.userType,
         }
         const token=jwt.sign(payload,secret);
-        res.cookie("uid",token);
+        res.cookie("uid",token,{
+            httpOnly: true,
+            secure: true,       
+            sameSite: "None",   
+        });
         return res.status(200).json({ message: "register successful" });
     }
 ];
@@ -74,7 +78,11 @@ exports.postLogin=async(req,res,next)=>{
                 userType:user.userType,
             }
             const token=jwt.sign(payload,secret);
-            res.cookie("uid",token);
+            res.cookie("uid",token,{
+                httpOnly: true,
+                secure: true,       
+                sameSite: "None",   
+            });
             return res.status(200).json({ userType:payload.userType });
         }
     }

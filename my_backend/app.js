@@ -16,8 +16,8 @@ const secret="bro,icannottellthis!!";
 const  app=express();
 
 app.use(cors({
-    origin:"http://localhost:5173",
-    credentials:true,
+  origin: process.env.CLIENT_URL,
+  credentials: true
 }));
 
 app.use(express.urlencoded());

@@ -15,7 +15,9 @@ const HomeItem = ({ item }) => {
 
   const handleAddtoBag = async () => {
     try {
-      const result = await axios.post(`http://localhost:3030/bag/${item._id}`);
+      const result = await axios.post(
+        `https://myntra-clone-ultg.onrender.com/bag/${item._id}`,
+      );
       console.log(result.data);
       dispatch(bagItemsActions.addToBag({ itemId: item._id }));
     } catch (err) {
@@ -25,7 +27,9 @@ const HomeItem = ({ item }) => {
   const handleDelete = async (e, pid) => {
     try {
       console.log("processing remove product..");
-      await axios.delete(`http://localhost:3030/admin/remove-product/${pid}`);
+      await axios.delete(
+        `https://myntra-clone-ultg.onrender.com/admin/remove-product/${pid}`,
+      );
       console.log("removed succesfully..");
       dispatch(itemListActions.removeItem({ pid }));
       navigate("/");

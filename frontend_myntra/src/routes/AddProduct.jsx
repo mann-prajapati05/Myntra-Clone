@@ -29,7 +29,7 @@ const AddProduct = () => {
     (async () => {
       console.log(productId);
       const result = await axios.get(
-        `http://localhost:3030/admin/${productId}`,
+        `https://myntra-clone-ultg.onrender.com/admin/${productId}`,
         { withCredentials: true, signal },
       );
       const {
@@ -98,7 +98,7 @@ const AddProduct = () => {
       try {
         if (isEditMode) {
           const result = await axios.put(
-            `http://localhost:3030/admin/modify-product/${productId}`,
+            `https://myntra-clone-ultg.onrender.com/admin/modify-product/${productId}`,
             form,
             {
               withCredentials: true,
@@ -111,7 +111,7 @@ const AddProduct = () => {
           setSuccess("Product updated successfully!");
         } else {
           const result = await axios.post(
-            "http://localhost:3030/admin/add-product",
+            "https://myntra-clone-ultg.onrender.com/admin/add-product",
             form,
             {
               withCredentials: true,

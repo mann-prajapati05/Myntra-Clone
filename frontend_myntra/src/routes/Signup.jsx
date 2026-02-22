@@ -43,7 +43,10 @@ const Signup = () => {
     setErrors(err);
     if (Object.keys(err).length === 0) {
       try {
-        const result = await axios.post("http://localhost:3030/signup", form);
+        const result = await axios.post(
+          "https://myntra-clone-ultg.onrender.com/signup",
+          form,
+        );
         console.log(result.data);
         console.log("Signup payload:", form);
         alert("Signup successful");

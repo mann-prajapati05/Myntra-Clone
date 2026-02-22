@@ -22,7 +22,7 @@ function App() {
       try {
         console.log("auth");
         const result = await axios.get(
-          "http://localhost:3030/verify",
+          "https://myntra-clone-ultg.onrender.com/verify",
           { withCredentials: true },
           { signal },
         );

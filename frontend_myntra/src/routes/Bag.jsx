@@ -19,7 +19,7 @@ const Bag = () => {
     (async () => {
       try {
         const result = await axios.get(
-          "http://localhost:3030/bag/items",
+          "https://myntra-clone-ultg.onrender.com/bag/items",
           { withCredentials: true },
           { signal },
         );

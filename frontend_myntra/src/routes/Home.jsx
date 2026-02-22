@@ -12,7 +12,7 @@ const Home = () => {
 
     (async () => {
       const result = await axios.get(
-        "http://localhost:3030",
+        "https://myntra-clone-ultg.onrender.com",
         { withCredentials: true },
         { signal },
       );

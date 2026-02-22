@@ -22,7 +22,7 @@ const Header = ({ isLoggedIn, setLogin }) => {
     (async () => {
       try {
         const result = await axios.get(
-          "http://localhost:3030/bag",
+          "https://myntra-clone-ultg.onrender.com/bag",
           { withCredentials: true },
           { signal },
         );
@@ -45,7 +45,7 @@ const Header = ({ isLoggedIn, setLogin }) => {
 
   const handleLogout = async () => {
     await axios.post(
-      "http://localhost:3030/logout",
+      "https://myntra-clone-ultg.onrender.com/logout",
       {},
       { withCredentials: true },
     );

@@ -17,7 +17,7 @@ const Login = () => {
     e.preventDefault();
     //console.log("Login submit:", { email, password });
     const result = await axios.post(
-      "http://localhost:3030/login",
+      "https://myntra-clone-ultg.onrender.com/login",
       {
         email,
         password,

@@ -1,5 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { isAdminActions } from "../store";
 axios.defaults.withCredentials = true;
 
 const Signup = () => {
@@ -12,6 +15,9 @@ const Signup = () => {
     gender: "male",
   });
   const [errors, setErrors] = useState({});
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { setLogin } = useOutletContext();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,6 +55,9 @@ const Signup = () => {
           confirmPassword: "",
           gender: "male",
         });
+        dispatch(isAdminActions.setAdminState(false));
+        setLogin(true);
+        navigate("/");
       } catch (err) {
         console.log("something went wrong while signup..", err);
       }

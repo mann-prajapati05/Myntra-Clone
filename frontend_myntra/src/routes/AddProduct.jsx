@@ -100,7 +100,12 @@ const AddProduct = () => {
           const result = await axios.put(
             `http://localhost:3030/admin/modify-product/${productId}`,
             form,
-            { withCredentials: true },
+            {
+              withCredentials: true,
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
           );
           console.log("Product updated:", result);
           setSuccess("Product updated successfully!");
@@ -108,7 +113,12 @@ const AddProduct = () => {
           const result = await axios.post(
             "http://localhost:3030/admin/add-product",
             form,
-            { withCredentials: true },
+            {
+              withCredentials: true,
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
           );
           console.log("Product added:", result);
           setSuccess("Product added successfully!");
@@ -165,7 +175,11 @@ const AddProduct = () => {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} noValidate>
+              <form
+                onSubmit={handleSubmit}
+                noValidate
+                encType="multipart/form-data"
+              >
                 <div className="row g-3">
                   {/* Title */}
                   <div className="col-12">
@@ -301,12 +315,15 @@ const AddProduct = () => {
                   <div className="col-md-6">
                     <label className="form-label fw-bold">Photo URL</label>
                     <input
-                      type="text"
+                      type="file"
                       name="photo"
                       className="form-control"
-                      value={form.photo}
-                      onChange={handleChange}
-                      placeholder="https://example.com/photo.jpg"
+                      onChange={(e) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          photo: e.target.files[0],
+                        }))
+                      }
                     />
                   </div>
 

@@ -1,13 +1,27 @@
 const Product = require("../models/product");
 const { ObjectId } = require('mongodb');
+const { uploadOnCloudinary } = require("../utils/cloudinary");
 
 exports.postAddProduct=async(req,res,next)=>{
     
     try{
         console.log("inside post add-product..");
         console.log(req.body);
-        const {photo,title,description,rating,reviewNumbers,actualPrice,MRP,discounts}=req.body;
-        const product=new Product({photo,title,description,rating,reviewNumbers,actualPrice,MRP,discounts});
+        const {title,description,rating,reviewNumbers,actualPrice,MRP,discounts}=req.body;
+        if(!req.file){
+            console.log("trigger err in req.file..");
+            return res.status(401).json({message:"error while uploading image"});
+        }
+        console.log(req.file);
+        const photo=req.file;
+
+        const cloudinaryResult= await uploadOnCloudinary(photo.path);
+
+        if(!cloudinaryResult){
+            return res.status(500).json({message:"cloudinary upload failed.."});
+        }
+
+        const product=new Product({photo:cloudinaryResult.secure_url,title,description,rating,reviewNumbers,actualPrice,MRP,discounts});
         const addedProduct=await product.save();
         res.status(201).json(addedProduct);
     }catch(err){
@@ -28,10 +42,19 @@ exports.postRemoveProduct= async(req,res,next)=>{
 }
 exports.putModifyProduct= async(req,res,next)=>{
     try{
-        const {photo,title,description,rating,reviewNumbers,actualPrice,MRP,discounts}=req.body;
+        const {title,description,rating,reviewNumbers,actualPrice,MRP,discounts}=req.body;
         const pid=req.params.productId;
+        
         const product=await Product.findById(pid);
-        product.photo=photo;
+        
+        if (req.file) {
+            const cloudinaryResult = await uploadOnCloudinary(req.file.path);
+            if (!cloudinaryResult) {
+                return res.status(500).json({ message: "Cloudinary upload failed" });
+            }
+            product.photo = cloudinaryResult.secure_url;
+        }
+
         product.title=title;
         product.description=description;
         product.rating=rating;

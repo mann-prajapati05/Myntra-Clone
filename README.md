@@ -2,7 +2,7 @@
 
 A full-stack **Myntra Clone** application built with **React, Redux, and Bootstrap** on the frontend and **Node.js + Express** on the backend.  
 The backend serves product data via REST APIs, while the frontend consumes APIs and manages cart state using Redux.
-
+live : https://myntra-clone-sable-two.vercel.app/
 ---
 
 ## 🚀 Features

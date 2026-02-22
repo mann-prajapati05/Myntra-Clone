@@ -45,7 +45,7 @@ app.use((req,res,next)=>{
 app.use('/admin',adminRouter);
 app.use('/bag',bagRouter);
 
-const PORT=3030;
+const PORT=process.env.PORT;
 mongoose.connect(DBpath).then(()=>{
     console.log("connecting to mongo..");
     app.listen(PORT,()=>{

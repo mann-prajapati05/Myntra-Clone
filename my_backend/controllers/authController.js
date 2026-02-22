@@ -90,7 +90,11 @@ exports.postLogin=async(req,res,next)=>{
 }
 
 exports.postLogout = (req,res,next) =>{
-    res.clearCookie("uid");
+    res.clearCookie("uid",{
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+    });
     res.status(200).json({message:"Logout successfully.."});
 }
 

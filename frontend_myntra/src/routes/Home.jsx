@@ -11,13 +11,17 @@ const Home = () => {
     const signal = controller.signal;
 
     (async () => {
-      const result = await axios.get(
-        "https://myntra-clone-ultg.onrender.com",
-        { withCredentials: true },
-        { signal },
-      );
-      console.log(result);
-      dispatch(itemListActions.itemsFromServer({ items: result.data }));
+      try {
+        const result = await axios.get(`${import.meta.env.VITE_COMMON_URL}`, {
+          withCredentials: true,
+          signal,
+        });
+        console.log(result);
+        dispatch(itemListActions.itemsFromServer({ items: result.data }));
+      } catch (err) {
+        if (axios.isCancel(err) || err?.code === "ERR_CANCELED") return;
+        console.log("home fetch error", err);
+      }
     })();
 
     return () => {

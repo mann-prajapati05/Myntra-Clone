@@ -9,7 +9,7 @@ const BagItem = ({ item }) => {
 
   const handleRemoveFromBag = async (e) => {
     const result = await axios.delete(
-      `https://myntra-clone-ultg.onrender.com/bag/${item._id}`,
+      `${import.meta.env.VITE_COMMON_URL}/bag/${item._id}`,
     );
     console.log(result.data);
     dispatch(bagItemsActions.removeFromBag({ itemId: item._id }));

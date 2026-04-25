@@ -8,6 +8,7 @@ axios.defaults.withCredentials = true;
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { setLogin } = useOutletContext();
 
   const dispatch = useDispatch();
@@ -15,21 +16,32 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //console.log("Login submit:", { email, password });
-    const result = await axios.post(
-      "https://myntra-clone-ultg.onrender.com/login",
-      {
-        email,
-        password,
-      },
-      { withCredentials: true },
-    );
-    console.log(result);
-    const { userType } = result.data;
-    if (userType === "admin") dispatch(isAdminActions.setAdminState(true));
-    else dispatch(isAdminActions.setAdminState(false));
-    setLogin(true);
-    navigate("/");
+    setError("");
+    try {
+      const result = await axios.post(
+        `${import.meta.env.VITE_COMMON_URL}/login`,
+        {
+          email,
+          password,
+        },
+        { withCredentials: true },
+      );
+      console.log(result);
+      const { userType } = result.data;
+      if (!userType) {
+        setError(result.data?.message || "Invalid email or password.");
+        return;
+      }
+      if (userType === "admin") dispatch(isAdminActions.setAdminState(true));
+      else dispatch(isAdminActions.setAdminState(false));
+      setLogin(true);
+      navigate("/");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Login failed. Please try again.",
+      );
+      console.log("login error", err);
+    }
   };
 
   return (
@@ -39,6 +51,11 @@ const Login = () => {
         style={{ minWidth: "320px", maxWidth: "420px", width: "100%" }}
       >
         <h3 className="card-title mb-3 text-center">Login</h3>
+        {error && (
+          <div className="alert alert-danger py-2" role="alert">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="email" className="form-label">

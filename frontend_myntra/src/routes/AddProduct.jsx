@@ -23,36 +23,43 @@ const AddProduct = () => {
   const [success, setSuccess] = useState("");
 
   useEffect(() => {
+    if (!isEditMode) return;
+
     const controller = new AbortController();
     const signal = controller.signal;
 
     (async () => {
-      console.log(productId);
-      const result = await axios.get(
-        `https://myntra-clone-ultg.onrender.com/admin/${productId}`,
-        { withCredentials: true, signal },
-      );
-      const {
-        photo,
-        title,
-        description,
-        rating,
-        reviewNumbers,
-        actualPrice,
-        MRP,
-        discounts,
-      } = result.data;
-      const new_form = {
-        photo,
-        title,
-        description,
-        rating,
-        reviewNumbers,
-        actualPrice,
-        MRP,
-        discounts,
-      };
-      setForm(new_form);
+      try {
+        console.log(productId);
+        const result = await axios.get(
+          `${import.meta.env.VITE_COMMON_URL}/admin/${productId}`,
+          { withCredentials: true, signal },
+        );
+        const {
+          photo,
+          title,
+          description,
+          rating,
+          reviewNumbers,
+          actualPrice,
+          MRP,
+          discounts,
+        } = result.data;
+        const new_form = {
+          photo,
+          title,
+          description,
+          rating,
+          reviewNumbers,
+          actualPrice,
+          MRP,
+          discounts,
+        };
+        setForm(new_form);
+      } catch (err) {
+        if (axios.isCancel(err) || err?.code === "ERR_CANCELED") return;
+        console.log("fetch product error", err);
+      }
     })();
 
     return () => {
@@ -98,7 +105,7 @@ const AddProduct = () => {
       try {
         if (isEditMode) {
           const result = await axios.put(
-            `https://myntra-clone-ultg.onrender.com/admin/modify-product/${productId}`,
+            `${import.meta.env.VITE_COMMON_URL}/admin/modify-product/${productId}`,
             form,
             {
               withCredentials: true,
@@ -111,7 +118,7 @@ const AddProduct = () => {
           setSuccess("Product updated successfully!");
         } else {
           const result = await axios.post(
-            "https://myntra-clone-ultg.onrender.com/admin/add-product",
+            `${import.meta.env.VITE_COMMON_URL}/admin/add-product`,
             form,
             {
               withCredentials: true,

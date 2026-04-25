@@ -11,9 +11,8 @@ const bagRouter = require('./routes/bagRouter');
 const authRouter = require('./routes/authRouter');
 
 const DBpath=process.env.MONGO_STR;
-const secret="bro,icannottellthis!!";
 
-const  app=express();
+const  app=express();  // backend deployed on https://myntra-clone-ultg.onrender.com
 
 app.use(cors({
   origin: process.env.CLIENT_URL,

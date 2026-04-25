@@ -22,9 +22,8 @@ function App() {
       try {
         console.log("auth");
         const result = await axios.get(
-          "https://myntra-clone-ultg.onrender.com/verify",
-          { withCredentials: true },
-          { signal },
+          `${import.meta.env.VITE_COMMON_URL}/verify`,
+          { withCredentials: true, signal },
         );
         const { userType } = result.data;
         console.log("type", userType);
@@ -33,6 +32,7 @@ function App() {
         }
         setLogin(true);
       } catch (err) {
+        if (axios.isCancel(err) || err?.code === "ERR_CANCELED") return;
         dispatch(isAdminActions.setAdminState(false));
         setLogin(false);
       }

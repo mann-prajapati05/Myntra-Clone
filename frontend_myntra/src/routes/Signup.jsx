@@ -15,6 +15,7 @@ const Signup = () => {
     gender: "male",
   });
   const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { setLogin } = useOutletContext();
@@ -27,8 +28,17 @@ const Signup = () => {
   const validate = () => {
     const err = {};
     if (!form.firstName.trim()) err.firstName = "First name is required";
+    if (form.firstName.trim() && form.firstName.trim().length < 2) {
+      err.firstName = "First name must be at least 2 characters";
+    }
     if (!form.lastName.trim()) err.lastName = "Last name is required";
+    if (form.lastName.trim() && form.lastName.trim().length < 2) {
+      err.lastName = "Last name must be at least 2 characters";
+    }
     if (!form.email.trim()) err.email = "Email is required";
+    if (form.email.trim() && !/^\S+@\S+\.\S+$/.test(form.email)) {
+      err.email = "Please enter a valid email address";
+    }
     if (!form.password) err.password = "Password is required";
     if (form.password && form.password.length < 8)
       err.password = "Password must be at least 8 characters";
@@ -39,16 +49,24 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setApiError("");
     const err = validate();
     setErrors(err);
     if (Object.keys(err).length === 0) {
+      const payload = {
+        firstName: form.firstName.trim(),
+        lastName: form.lastName.trim(),
+        email: form.email.trim(),
+        password: form.password,
+        gender: form.gender,
+      };
       try {
         const result = await axios.post(
-          "https://myntra-clone-ultg.onrender.com/signup",
-          form,
+          `${import.meta.env.VITE_COMMON_URL}/signup`,
+          payload,
         );
         console.log(result.data);
-        console.log("Signup payload:", form);
+        console.log("Signup payload:", payload);
         alert("Signup successful");
         setForm({
           firstName: "",
@@ -62,6 +80,21 @@ const Signup = () => {
         setLogin(true);
         navigate("/");
       } catch (err) {
+        if (
+          err.response?.status === 422 &&
+          Array.isArray(err.response?.data?.errors)
+        ) {
+          const serverErrors = {};
+          err.response.data.errors.forEach((item) => {
+            if (item.path) serverErrors[item.path] = item.msg;
+          });
+          setErrors((prev) => ({ ...prev, ...serverErrors }));
+          setApiError("Please correct the highlighted fields.");
+        } else if (err.response?.status === 409) {
+          setApiError("Email already registered. Please login instead.");
+        } else {
+          setApiError("Signup failed. Please try again.");
+        }
         console.log("something went wrong while signup..", err);
       }
     }
@@ -74,6 +107,11 @@ const Signup = () => {
           <div className="card shadow-sm">
             <div className="card-body">
               <h3 className="card-title mb-4 text-center">Create Account</h3>
+              {apiError && (
+                <div className="alert alert-danger py-2" role="alert">
+                  {apiError}
+                </div>
+              )}
               <form onSubmit={handleSubmit} noValidate>
                 <div className="row g-3">
                   <div className="col-md-6">

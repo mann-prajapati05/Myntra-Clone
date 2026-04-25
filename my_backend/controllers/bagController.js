@@ -29,7 +29,7 @@ exports.getBag = async(req,res,next)=>{
 
     const user=await User.findById(decoded._id);
     //await user.populate('bagItems');
-    res.status(201).json(user.bagItems);
+    res.status(200).json(user.bagItems);
 }
 exports.getBagItems = async(req,res,next)=>{
     //const user=await User.findOne({email:"abc@gmail.com"}); //dummy find user - just to check api
@@ -39,7 +39,7 @@ exports.getBagItems = async(req,res,next)=>{
     const user=await User.findById(decoded._id);
     await user.populate('bagItems');
     console.log("i res you from getbagItems Backend..");
-    res.status(201).json(user.bagItems);
+    res.status(200).json(user.bagItems);
 }
 exports.deleteFromBag = async(req,res,next)=>{
     const productId=req.params.productId;
@@ -53,6 +53,6 @@ exports.deleteFromBag = async(req,res,next)=>{
        user.bagItems=await user.bagItems.filter(pid=>pid.toString()!=productId.toString());
        await user.save();
    }
-   return res.status(201).json({message:"removed from bag succesful"});
+   return res.status(204).json({message:"removed from bag succesful"});
 }
 

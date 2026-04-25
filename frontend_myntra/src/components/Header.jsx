@@ -22,9 +22,8 @@ const Header = ({ isLoggedIn, setLogin }) => {
     (async () => {
       try {
         const result = await axios.get(
-          "https://myntra-clone-ultg.onrender.com/bag",
-          { withCredentials: true },
-          { signal },
+          `${import.meta.env.VITE_COMMON_URL}/bag`,
+          { withCredentials: true, signal },
         );
         console.log(result.data);
         dispatch(
@@ -45,7 +44,7 @@ const Header = ({ isLoggedIn, setLogin }) => {
 
   const handleLogout = async () => {
     await axios.post(
-      "https://myntra-clone-ultg.onrender.com/logout",
+      `${import.meta.env.VITE_COMMON_URL}/logout`,
       {},
       { withCredentials: true },
     );

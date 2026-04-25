@@ -19,14 +19,15 @@ const Bag = () => {
     (async () => {
       try {
         const result = await axios.get(
-          "https://myntra-clone-ultg.onrender.com/bag/items",
-          { withCredentials: true },
-          { signal },
+          `${import.meta.env.VITE_COMMON_URL}/bag/items`,
+          { withCredentials: true, signal },
         );
         console.log("i got the Bag in Bag.jsx..", result.data);
         setBagItems(result.data);
       } catch (err) {
-        navigate("/login");
+        if (axios.isCancel(err) || err?.code === "ERR_CANCELED") return;
+        console.log("err occured..", err);
+        if (err.response?.status === 401) navigate("/login");
       }
     })();
 

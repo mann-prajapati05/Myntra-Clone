@@ -16,7 +16,7 @@ const AdminLogin = () => {
     e.preventDefault();
     //console.log("Login submit:", { email, password });
     const result = await axios.post(
-      "https://myntra-clone-ultg.onrender.com/login",
+      `${import.meta.env.VITE_COMMON_URL}/login`,
       {
         email,
         password,

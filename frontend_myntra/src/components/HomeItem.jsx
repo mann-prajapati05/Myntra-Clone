@@ -16,7 +16,7 @@ const HomeItem = ({ item }) => {
   const handleAddtoBag = async () => {
     try {
       const result = await axios.post(
-        `https://myntra-clone-ultg.onrender.com/bag/${item._id}`,
+        `${import.meta.env.VITE_COMMON_URL}/bag/${item._id}`,
       );
       console.log(result.data);
       dispatch(bagItemsActions.addToBag({ itemId: item._id }));
@@ -28,7 +28,7 @@ const HomeItem = ({ item }) => {
     try {
       console.log("processing remove product..");
       await axios.delete(
-        `https://myntra-clone-ultg.onrender.com/admin/remove-product/${pid}`,
+        `${import.meta.env.VITE_COMMON_URL}/admin/remove-product/${pid}`,
       );
       console.log("removed succesfully..");
       dispatch(itemListActions.removeItem({ pid }));
